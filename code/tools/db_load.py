@@ -168,7 +168,12 @@ async def fetch_url(url: str) -> Tuple[str, Optional[str]]:
     
     try:
         async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
+            # Set a user-agent header to avoid blocking by some servers
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+            }
+
+            async with session.get(url, headers=headers) as response:
                 if response.status != 200:
                     raise ValueError(f"Failed to fetch URL {url}: HTTP {response.status}")
                 
